@@ -6,9 +6,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Hero from './components/Hero';
-import Header from './components/Header';
-
 
 const router = createBrowserRouter([
   {
