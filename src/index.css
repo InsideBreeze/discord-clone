@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .nav_link {
+        @apply font-semibold hover:underline
+    }
+}
