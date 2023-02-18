@@ -3,7 +3,7 @@ import React from "react";
 
 const Channel = ({ channelName }) => {
   return (
-    <div className="flex items-center p-1 hover:bg-gray-600 rounded-xl">
+    <div className="flex items-center p-1 hover:bg-gray-600 rounded-xl cursor-pointer">
       <HashtagIcon className="h-5 mr-1" />
       {channelName}
     </div>
