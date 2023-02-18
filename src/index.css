@@ -7,6 +7,6 @@
         @apply font-semibold hover:underline
     }
     .server_default {
-        @apply flex justify-center items-center h-12 w-12 bg-gray-700 rounded-full hover:rounded-2xl
+        @apply flex justify-center items-center h-12 w-12 bg-gray-700 rounded-full hover:rounded-2xl cursor-pointer transition-all duration-100 ease-out
     }
 }
