@@ -1,17 +1,36 @@
-import {
-  ArrowDownIcon,
-  ChevronDownIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { addDoc, collection } from "firebase/firestore";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Navigate } from "react-router-dom";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import Channel from "./Channel";
 import ServerIcon from "./ServerIcon";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 const Channels = () => {
   const [user] = useAuthState(auth);
+
+  // https://github.com/CSFrequency/react-firebase-hooks/tree/master/firestore
+  const [channels] = useCollection(collection(db, "channels"));
+
+  // add channel to the server
+  // https://firebase.google.com/docs/firestore/quickstart
+  const addChannel = async () => {
+    const channelName = prompt(
+      "Please enter the name of channel you want to add."
+    );
+    if (channelName) {
+      try {
+        // Firestore creates collections and documents implicitly the first time you add data to the document. You do not need to explicitly create collections or documents.
+        await addDoc(collection(db, "channels"), {
+          channelName,
+        });
+      } catch (error) {
+        console.error("Error adding channel: ", e);
+      }
+    }
+  };
 
   if (!user) {
     return <Navigate replace to="/" />;
@@ -39,11 +58,6 @@ const Channels = () => {
         </div>
       </div>
       {/* channels sidebar */}
-      {/* 
-      bg: bg-[#2f3136]
-      h4 hover: bg-[#34373c]
-      text: text-[#8e9297] 
-       */}
       <div className="bg-[#2f3136] min-w-max  ">
         <div
           className="flex text-white justify-between items-center border-b border-gray-800 p-2
@@ -52,54 +66,24 @@ const Channels = () => {
           <h2 className="font-bold">Department of Compute...</h2>
           <ChevronDownIcon className="w-6 ml-2" />
         </div>
-        <div className="overflow-y-scroll scrollbar-hide h-screen">
-          <div className="text-[#8e9297] flex items-center justify-start p-3 ">
+        <div className="overflow-y-scroll scrollbar-hide h-screen text-[#8e9297]">
+          <div className=" flex items-center justify-start p-3 ">
             <ChevronDownIcon className="w-4" />
             <h4 className="ml-2 font-medium">Channels</h4>
-            <PlusIcon className="w-7 ml-auto hover:text-white" />
+            <PlusIcon
+              className="w-7 ml-auto hover:text-white"
+              onClick={addChannel}
+            />
           </div>
           {/* channels */}
-          <div className="">
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
-            <Channel />
+          <div className="space-y-1">
+            {channels &&
+              channels.docs.map((channel) => (
+                <Channel
+                  key={channel.id}
+                  channelName={channel.data().channelName}
+                />
+              ))}
           </div>
         </div>
       </div>
