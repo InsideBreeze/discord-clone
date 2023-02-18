@@ -3,9 +3,11 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [user] = useAuthState(auth);
   const login = () => {
     signInWithPopup(auth, provider)
       .then(() => navigate("/channels"))
@@ -49,9 +51,15 @@ const Header = () => {
         <button
           className="p-2 bg-white text-black text-xs rounded-full px-4 md:text-sm hover:text-discord_blurple hover:shadow-2xl
         transition duration-200 ease-in-out font-medium"
-          onClick={login}
+          onClick={
+            user
+              ? () => {
+                  navigate("/channels");
+                }
+              : login
+          }
         >
-          Login
+          {user ? "Open Discord" : "Login"}
         </button>
         <Bars3Icon className="w-9 cursor-pointer lg:hidden" />
       </div>
