@@ -1,7 +1,18 @@
 import React from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const login = () => {
+    signInWithPopup(auth, provider)
+      .then(() => navigate("/channels"))
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
   return (
     <div className="flex justify-between items-center p-6 bg-discord_blurple text-white lg:px-10">
       <a href="/">
@@ -38,6 +49,7 @@ const Header = () => {
         <button
           className="p-2 bg-white text-black text-xs rounded-full px-4 md:text-sm hover:text-discord_blurple hover:shadow-2xl
         transition duration-200 ease-in-out font-medium"
+          onClick={login}
         >
           Login
         </button>
