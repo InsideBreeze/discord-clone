@@ -95,7 +95,7 @@ const Channels = () => {
           </div>
         </div>
         {/* user info */}
-        <div className="flex items-center justify-between bg-[#232428] p-1 py-2">
+        <div className="flex items-center justify-between bg-[#232428] p-1 ">
           <div className="flex space-x-2 items-center hover:bg-gray-700 cursor-pointer rounded-md p-1 pr-3">
             <div className="">
               <img
@@ -113,16 +113,16 @@ const Channels = () => {
             </div>
           </div>
           <div className="flex space-x-1 text-gray-100">
-            <MicrophoneIcon className="icon" />
-            <PhoneIcon className="icon" />
-            <CogIcon className="icon" />
+            <MicrophoneIcon className="icon p-1" />
+            <PhoneIcon className="icon p-1" />
+            <CogIcon className="icon p-1" />
           </div>
         </div>
       </div>
 
       {/* chat */}
       <div className="flex-grow">
-        <Outlet />
+        <Chat />
       </div>
     </div>
   );

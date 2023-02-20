@@ -10,6 +10,6 @@
         @apply flex justify-center items-center h-12 w-12 bg-gray-700 rounded-full hover:rounded-2xl cursor-pointer transition-all duration-100 ease-out
     }
     .icon {
-        @apply flex h-7 p-1 justify-center items-center bg-transparent rounded-md hover:bg-gray-700 cursor-pointer
+        @apply flex h-7 justify-center items-center bg-transparent rounded-md hover:bg-gray-700 cursor-pointer
     }
 }
