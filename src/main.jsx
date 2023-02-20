@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Channels from "./components/Channels";
+import Chat from "./components/Chat";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,12 @@ const router = createBrowserRouter([
   {
     path: "/channels",
     element: <Channels />,
+    children: [
+      {
+        path: ":channelId",
+        element: <Chat />,
+      },
+    ],
   },
 ]);
 

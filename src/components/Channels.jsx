@@ -1,12 +1,19 @@
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  CogIcon,
+  MicrophoneIcon,
+  PhoneIcon,
+  PlusIcon,
+} from "@heroicons/react/24/solid";
 import { addDoc, collection } from "firebase/firestore";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { auth, db } from "../firebase";
 import Channel from "./Channel";
 import ServerIcon from "./ServerIcon";
 import { useCollection } from "react-firebase-hooks/firestore";
+import Chat from "./Chat";
 
 const Channels = () => {
   const [user] = useAuthState(auth);
@@ -58,15 +65,15 @@ const Channels = () => {
         </div>
       </div>
       {/* channels sidebar */}
-      <div className="bg-[#2f3136] min-w-max  ">
+      <div className="bg-[#2f3136] min-w-max h-screen flex flex-col">
         <div
-          className="flex text-white justify-between items-center border-b border-gray-800 p-2
+          className="flex text-[#f3f4f5] justify-between items-center border-b border-gray-800 p-2
         hover:bg-[#34373c]"
         >
           <h2 className="font-bold">Department of Compute...</h2>
-          <ChevronDownIcon className="w-6 ml-2" />
+          <ChevronDownIcon className="w-4 ml-2" />
         </div>
-        <div className="overflow-y-scroll scrollbar-hide h-screen text-[#8e9297]">
+        <div className="overflow-y-scroll scrollbar-hide text-[#8e9297] flex-grow">
           <div className=" flex items-center justify-start p-3 ">
             <ChevronDownIcon className="w-4" />
             <h4 className="ml-2 font-medium">Channels</h4>
@@ -81,11 +88,41 @@ const Channels = () => {
               channels.docs.map((channel) => (
                 <Channel
                   key={channel.id}
+                  id={channel.id}
                   channelName={channel.data().channelName}
                 />
               ))}
           </div>
         </div>
+        {/* user info */}
+        <div className="flex items-center justify-between bg-[#232428] p-1 py-2">
+          <div className="flex space-x-2 items-center hover:bg-gray-700 cursor-pointer rounded-md p-1 pr-3">
+            <div className="">
+              <img
+                src={user?.photoURL}
+                alt=""
+                className="h-9 rounded-full"
+                onClick={() => auth.signOut()}
+              />
+            </div>
+            <div className="font-medium">
+              <h5 className="text-[#f3f4f5] text-sm">{user?.displayName}</h5>
+              <span className="block -mt-1 text-[#b8b9bf] text-xs">
+                #{user?.uid.substring(0, 4)}
+              </span>
+            </div>
+          </div>
+          <div className="flex space-x-1 text-gray-100">
+            <MicrophoneIcon className="icon" />
+            <PhoneIcon className="icon" />
+            <CogIcon className="icon" />
+          </div>
+        </div>
+      </div>
+
+      {/* chat */}
+      <div className="flex-grow">
+        <Outlet />
       </div>
     </div>
   );
