@@ -112,7 +112,7 @@ const Channels = () => {
               </span>
             </div>
           </div>
-          <div className="flex space-x-1 text-gray-100">
+          <div className="flex space-x-1 text-gray-300">
             <MicrophoneIcon className="icon p-1" />
             <PhoneIcon className="icon p-1" />
             <CogIcon className="icon p-1" />
