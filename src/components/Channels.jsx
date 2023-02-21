@@ -8,7 +8,7 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import Channel from "./Channel";
 import ServerIcon from "./ServerIcon";
