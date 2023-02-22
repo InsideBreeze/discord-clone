@@ -8,4 +8,4 @@ Following libraries and tools are used:
 - heroes icons
 - redux: state management
 - tailwind css: css framework
-- google firebase: database and auth services
+- google firebase & react-firebase-hooks: database and auth services
