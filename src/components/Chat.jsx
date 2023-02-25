@@ -10,7 +10,7 @@ import {
   QuestionMarkCircleIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   collection,
@@ -24,6 +24,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
+import data from "@emoji-mart/data/sets/14/google.json";
+import Picker from "@emoji-mart/react";
 
 const Chat = () => {
   const channelName = useSelector((state) => state.channel.channelName);
@@ -39,6 +41,7 @@ const Chat = () => {
       orderBy("timestamp", "asc")
     );
   const [messages] = useCollection(q);
+  const [showPicker, setShowPicker] = useState(false);
 
   // scroll to bottom ref, so make the lastest message visible
   const scrollToBottom = () => {
@@ -46,6 +49,14 @@ const Chat = () => {
       behavior: "smooth",
     });
   };
+
+  const handleSelectEmoji = (emoji) => {
+    inputRef.current.value += emoji.native;
+    // close the picker
+    console.log(emoji);
+    setShowPicker(!showPicker);
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
     const message = inputRef.current.value;
@@ -108,26 +119,43 @@ const Chat = () => {
         {/* for reference */}
         <div className="bt-4" ref={bottomRef}></div>
       </main>
-      <div className="flex p-2.5 items-center space-x-1 mb-2 mx-4 bg-[#202225] rounded-lg text-gray-300">
-        <PlusCircleIcon className="h-7 hover:text-gray-100 cursor-pointer" />
-        <form className="flex-grow" onSubmit={sendMessage}>
-          <input
-            type="text"
-            className="w-full bg-transparent focus:outline-none text-[#dcddde]"
-            placeholder={
-              channelName
-                ? ` Message #${channelName}`
-                : "Select a channel to chat"
-            }
-            disabled={channelName === null}
-            ref={inputRef}
+      <div className="relative">
+        <div className="flex p-2.5 items-center space-x-1 mb-2 mx-4 bg-[#202225] rounded-lg text-gray-300 relative">
+          <PlusCircleIcon className="h-7 hover:text-gray-100 cursor-pointer" />
+          <form className="flex-grow" onSubmit={sendMessage}>
+            <input
+              type="text"
+              className="w-full bg-transparent focus:outline-none text-[#dcddde]"
+              placeholder={
+                channelName
+                  ? ` Message #${channelName}`
+                  : "Select a channel to chat"
+              }
+              disabled={channelName === null}
+              ref={inputRef}
+            />
+            <button hidden type="submit">
+              send
+            </button>
+          </form>
+          <GifIcon className="h-7 hover:text-gray-100 cursor-pointer" />
+          <FaceSmileIcon
+            className="h-7 hover:text-gray-100 cursor-pointer"
+            onClick={() => setShowPicker(!showPicker)}
           />
-          <button hidden type="submit">
-            send
-          </button>
-        </form>
-        <GifIcon className="h-7 hover:text-gray-100 cursor-pointer" />
-        <FaceSmileIcon className="h-7 hover:text-gray-100 cursor-pointer" />
+        </div>
+        <div
+          className={`${
+            showPicker ? "" : "hidden"
+          } absolute right-0 bottom-[57px]`}
+        >
+          <Picker
+            data={data}
+            onEmojiSelect={handleSelectEmoji}
+            theme="dark"
+            set="google"
+          />
+        </div>
       </div>
     </div>
   );
