@@ -154,6 +154,7 @@ const Chat = () => {
             onEmojiSelect={handleSelectEmoji}
             theme="dark"
             set="google"
+            onClickOutside={() => showPicker && setShowPicker(false)}
           />
         </div>
       </div>
