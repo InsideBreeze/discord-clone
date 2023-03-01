@@ -67,9 +67,13 @@ const Chat = () => {
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
+    console.log("hmmm");
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result);
     };
+    /* reader.onloadend = () => {
+      setSelectedFile(null);
+    }; */
   };
 
   const sendMessage = async (e) => {
@@ -110,7 +114,7 @@ const Chat = () => {
     }
   };
   return (
-    <div className="h-screen  bg-[#202225] flex flex-col overflow-y-scroll scrollbar-hide">
+    <div className="h-screen  bg-[#313338] flex flex-col overflow-y-scroll scrollbar-hide">
       <header className="flex justify-between p-2.5 border-b border-gray-800 text-gray-300 items-center">
         <div className="flex items-center space-x-1">
           <HashtagIcon className="w-5" />
@@ -122,7 +126,7 @@ const Chat = () => {
           <BellIcon className="icon hover:text-gray-100" />
           <ChartBarIcon className="icon hover:text-gray-100" />
           <UsersIcon className="icon hover:text-gray-100" />
-          <div className="flex bg-[#202225] rounded-md items-center">
+          <div className="flex bg-[#383a40] rounded-md items-center">
             <input
               type="text"
               className="p-1 text-sm bg-transparent focus:outline-none"
@@ -156,27 +160,30 @@ const Chat = () => {
       </main>
 
       {/* input */}
-      <div className="sticky bottom-3 z-50 flex flex-col  bg-[#313338] mx-4 divide-gray-700 divide-y my-3 rounded-xl">
+      <div className="sticky bottom-3 z-50 flex flex-col  bg-[#383a40] mx-4 divide-gray-700 divide-y my-3 rounded-xl shadow-2xl">
         {selectedFile && (
           <div className="flex justify-start p-5">
-            <div className="bg-[#202225] p-3 rounded-xl h-50 w-50">
+            <div className="bg-[#313338] p-3 rounded-xl h-50 w-50">
               <img
                 alt=""
                 src={selectedFile}
-                className="object-contain max-h-40"
+                className="object-contain shadow-xl max-h-40"
               />
             </div>
 
             <div
               className="ml-1 text-[red] icon p-1"
-              onClick={() => setSelectedFile(null)}
+              onClick={() => {
+                setSelectedFile(null);
+                filePickerRef.current.value = null; // need this for empty file input
+              }}
             >
               <TrashIcon className="w-5 h-5" />
             </div>
           </div>
         )}
 
-        <div className="flex p-2.5 items-center space-x-1  mx-4 bg-[#313338] rounded-lg text-gray-300 relative">
+        <div className="flex p-2 items-center space-x-1  mx-4 bg-[#383a40] rounded-lg text-gray-300 relative my-3">
           <PlusCircleIcon
             className="cursor-pointer h-7 hover:text-gray-100"
             onClick={() => filePickerRef.current.click()}
@@ -217,7 +224,6 @@ const Chat = () => {
           } absolute right-0 bottom-[57px]`}
         >
           <Picker
-            data={data}
             onEmojiSelect={handleSelectEmoji}
             theme="dark"
             set="google"

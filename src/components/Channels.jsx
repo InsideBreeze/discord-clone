@@ -43,10 +43,11 @@ const Channels = () => {
     return <Navigate replace to="/" />;
   }
 
+  /* #232428 */
   return (
-    <div className="h-screen flex overflow-hidden">
+    <div className="flex h-screen overflow-hidden">
       {/* servers sidebar */}
-      <div className="bg-[#202225] flex flex-col space-y-3 p-2 overflow-y-scroll scrollbar-hide min-w-max">
+      <div className="bg-[#2B2D31] flex flex-col space-y-3 p-2 overflow-y-scroll scrollbar-hide min-w-max">
         <div className="server_default hover:bg-discord_blurple">
           <img
             src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6ca814282eca7172c6_icon_clyde_white_RGB.svg"
@@ -54,7 +55,7 @@ const Channels = () => {
             className="h-5"
           />
         </div>
-        <hr className="w-7 mx-auto border border-gray-700" />
+        <hr className="mx-auto border border-gray-700 w-7" />
         <ServerIcon image="https://cdn.discordapp.com/icons/266695661670367232/a_d3df4a82d6bdde45de98d1afdd730ebc.webp" />
         <ServerIcon image=" https://cdn.discordapp.com/icons/757581218085863474/bac78418031b7a0c0af286d4cb29cc9b.webp" />
         <ServerIcon image="https://cdn.discordapp.com/icons/266695661670367232/a_d3df4a82d6bdde45de98d1afdd730ebc.webp" />
@@ -74,11 +75,11 @@ const Channels = () => {
           <ChevronDownIcon className="w-4 ml-2" />
         </div>
         <div className="overflow-y-scroll scrollbar-hide text-[#8e9297] flex-grow">
-          <div className=" flex items-center justify-start p-3 ">
+          <div className="flex items-center justify-start p-3 ">
             <ChevronDownIcon className="w-4" />
             <h4 className="ml-2 font-medium">Channels</h4>
             <PlusIcon
-              className="w-7 ml-auto hover:text-white"
+              className="ml-auto w-7 hover:text-white"
               onClick={addChannel}
             />
           </div>
@@ -96,12 +97,12 @@ const Channels = () => {
         </div>
         {/* user info */}
         <div className="flex items-center justify-between bg-[#232428] p-1 ">
-          <div className="flex space-x-2 items-center hover:bg-gray-700 cursor-pointer rounded-md p-1 pr-3">
+          <div className="flex items-center p-1 pr-3 space-x-2 rounded-md cursor-pointer hover:bg-gray-700">
             <div className="">
               <img
                 src={user?.photoURL}
                 alt=""
-                className="h-9 rounded-full"
+                className="rounded-full h-9"
                 onClick={() => auth.signOut()}
               />
             </div>
@@ -113,9 +114,9 @@ const Channels = () => {
             </div>
           </div>
           <div className="flex space-x-1 text-gray-300">
-            <MicrophoneIcon className="icon p-1" />
-            <PhoneIcon className="icon p-1" />
-            <CogIcon className="icon p-1" />
+            <MicrophoneIcon className="p-1 icon" />
+            <PhoneIcon className="p-1 icon" />
+            <CogIcon className="p-1 icon" />
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const Message = ({ message, id, email, name, photoURL, timestamp, image }) => {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="flex p-1 my-2.5 mr-2 ml-4 items-start hover:bg-[#32354b] rounded-md group">
+    <div className="flex p-1 my-2.5 mr-2 ml-4 items-start hover:bg-opacity-10 rounded-md group">
       {/* <div className="flex items-center justify-center"> */}
       <img
         src={photoURL}
@@ -28,35 +28,36 @@ const Message = ({ message, id, email, name, photoURL, timestamp, image }) => {
             {moment(timestamp?.toDate().getTime()).format("lll")}
           </span>
         </div>
-        <p className="text-[#dcddde]">{message}</p>
-        {image && (
-          <div className="max-w-[250px] my-2">
-            <img
-              src={image}
-              alt=""
-              className="object-scale-down rounded-md max-w-10"
-            />
-          </div>
-        )}
-
-        <div
-          className="text-[red] ml-auto rounded-md"
-          onClick={async () =>
-            deleteDoc(
-              doc(
-                collection(
-                  doc(collection(db, "channels"), channelId),
-                  "messages"
-                ),
-                id
-              )
-            )
-          }
-        >
-          {/*  {name === user.displayName && (
-            <TrashIcon className="hidden h-5 cursor-pointer group-hover:inline" />
-          )} */}
+        <div className="">
+          <p className="text-[#dcddde]">{message}</p>
+          {image && (
+            <div className="max-w-[250px] my-2">
+              <img
+                src={image}
+                alt=""
+                className="object-scale-down rounded-md max-w-10"
+              />
+            </div>
+          )}
         </div>
+      </div>
+      <div
+        className="text-[red] ml-auto rounded-md"
+        onClick={async () =>
+          deleteDoc(
+            doc(
+              collection(
+                doc(collection(db, "channels"), channelId),
+                "messages"
+              ),
+              id
+            )
+          )
+        }
+      >
+        {name === user.displayName && (
+          <TrashIcon className="hidden h-5 ml-auto cursor-pointer group-hover:inline" />
+        )}
       </div>
     </div>
   );
