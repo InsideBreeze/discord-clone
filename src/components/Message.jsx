@@ -6,22 +6,22 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useSelector } from "react-redux";
 import { auth, db } from "../firebase";
 
-const Message = ({ message, id, email, name, photoURL, timestamp }) => {
+const Message = ({ message, id, email, name, photoURL, timestamp, image }) => {
   const channelId = useSelector((state) => state.channel.channelId);
   const [user] = useAuthState(auth);
 
   return (
-    <div className="flex  p-1 my-2.5 mr-2 ml-4 items-center hover:bg-[#32354b] rounded-md group">
-      <div className="">
-        <img
-          src={photoURL}
-          alt=""
-          className="h-9 rounded-full cursor-pointer hover:shadow-2xl mr-3"
-        />
-      </div>
-      <div className="">
-        <div className="space-x-2">
-          <span className="font-medium text-sm hover:underline cursor-pointer text-[#f3f4f5]">
+    <div className="flex p-1 my-2.5 mr-2 ml-4 items-start hover:bg-[#32354b] rounded-md group">
+      {/* <div className="flex items-center justify-center"> */}
+      <img
+        src={photoURL}
+        alt=""
+        className="mr-3 rounded-full cursor-pointer h-9 hover:shadow-2xl"
+      />
+      {/*  </div> */}
+      <div className="relative flex flex-col">
+        <div className="flex items-center space-x-2">
+          <span className="font-medium p-0 hover:underline cursor-pointer text-[#f3f4f5] leading-5 tracking-wide">
             {name}
           </span>
           <span className="text-[#72767d] text-xs">
@@ -29,24 +29,34 @@ const Message = ({ message, id, email, name, photoURL, timestamp }) => {
           </span>
         </div>
         <p className="text-[#dcddde]">{message}</p>
-      </div>
-      <div
-        className="text-[red] ml-auto rounded-md"
-        onClick={async () =>
-          deleteDoc(
-            doc(
-              collection(
-                doc(collection(db, "channels"), channelId),
-                "messages"
-              ),
-              id
-            )
-          )
-        }
-      >
-        {name === user.displayName && (
-          <TrashIcon className="h-5 cursor-pointer hidden group-hover:inline" />
+        {image && (
+          <div className="max-w-[250px] my-2">
+            <img
+              src={image}
+              alt=""
+              className="object-scale-down rounded-md max-w-10"
+            />
+          </div>
         )}
+
+        <div
+          className="text-[red] ml-auto rounded-md"
+          onClick={async () =>
+            deleteDoc(
+              doc(
+                collection(
+                  doc(collection(db, "channels"), channelId),
+                  "messages"
+                ),
+                id
+              )
+            )
+          }
+        >
+          {/*  {name === user.displayName && (
+            <TrashIcon className="hidden h-5 cursor-pointer group-hover:inline" />
+          )} */}
+        </div>
       </div>
     </div>
   );

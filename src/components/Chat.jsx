@@ -19,13 +19,16 @@ import {
   doc,
   query,
   orderBy,
+  updateDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 import data from "@emoji-mart/data/sets/14/google.json";
 import Picker from "@emoji-mart/react";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 const Chat = () => {
   const channelName = useSelector((state) => state.channel.channelName);
@@ -33,6 +36,9 @@ const Chat = () => {
   const inputRef = useRef(null);
   const bottomRef = useRef(null);
   const [user] = useAuthState(auth);
+  const filePickerRef = useRef();
+
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const q =
     channelId &&
@@ -50,20 +56,30 @@ const Chat = () => {
     });
   };
 
-  const handleSelectEmoji = (emoji) => {
-    inputRef.current.value += emoji.native;
-    // close the picker
-    console.log(emoji);
+  const handleSelectEmoji = (e) => {
+    inputRef.current.value += e.native;
     setShowPicker(!showPicker);
+  };
+
+  // attach file
+  const attachFile = (e) => {
+    const reader = new FileReader();
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    reader.onload = (readerEvent) => {
+      setSelectedFile(readerEvent.target.result);
+    };
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const message = inputRef.current.value;
-    console.log(message);
-    if (message) {
+
+    const message = inputRef.current.value.trim();
+    if (message || selectedFile) {
       inputRef.current.value = "";
-      await addDoc(
+
+      const docRef = await addDoc(
         collection(doc(collection(db, "channels"), channelId), "messages"),
         {
           timestamp: serverTimestamp(),
@@ -73,26 +89,43 @@ const Chat = () => {
           photoURL: user?.photoURL,
         }
       );
+      // user attach a image, store it to the firebase and atttach to this message
+      if (selectedFile) {
+        const imageRef = ref(storage, `images/${docRef.id}/image`);
+        await uploadString(imageRef, selectedFile, "data_url").then(
+          async () => {
+            const downloadURL = await getDownloadURL(imageRef);
+            await updateDoc(
+              doc(db, "channels", channelId, "messages", docRef.id),
+              {
+                image: downloadURL,
+              }
+            );
+          }
+        );
+        setSelectedFile(null);
+      }
+
       scrollToBottom();
     }
   };
   return (
-    <div className="h-screen bg-[#313338] flex flex-col overflow-y-scroll scrollbar-hide">
+    <div className="h-screen  bg-[#202225] flex flex-col overflow-y-scroll scrollbar-hide">
       <header className="flex justify-between p-2.5 border-b border-gray-800 text-gray-300 items-center">
-        <div className="flex space-x-1 items-center">
+        <div className="flex items-center space-x-1">
           <HashtagIcon className="w-5" />
           <h4 className="font-semibold">
             {channelName ? channelName : "Department of Compute..."}
           </h4>
         </div>
-        <div className="flex space-x-2 items-center">
+        <div className="flex items-center space-x-2">
           <BellIcon className="icon hover:text-gray-100" />
           <ChartBarIcon className="icon hover:text-gray-100" />
           <UsersIcon className="icon hover:text-gray-100" />
           <div className="flex bg-[#202225] rounded-md items-center">
             <input
               type="text"
-              className="bg-transparent text-sm p-1 focus:outline-none"
+              className="p-1 text-sm bg-transparent focus:outline-none"
               placeholder="Search"
             />
             <MagnifyingGlassIcon className="w-4 mr-1" />
@@ -101,9 +134,10 @@ const Chat = () => {
           <QuestionMarkCircleIcon className="icon hover:text-gray-100" />
         </div>
       </header>
-      <main className="flex-grow">
+      <main className="flex-grow overflow-y-scroll scrollbar-hide">
         {messages?.docs.map((doc) => {
-          const { timestamp, name, photoURL, email, message } = doc.data();
+          const { timestamp, name, photoURL, email, message, image } =
+            doc.data();
           return (
             <Message
               message={message}
@@ -113,15 +147,48 @@ const Chat = () => {
               timestamp={timestamp}
               email={email}
               photoURL={photoURL}
+              image={image}
             />
           );
         })}
         {/* for reference */}
         <div className="bt-4" ref={bottomRef}></div>
       </main>
-      <div className="relative">
-        <div className="flex p-2.5 items-center space-x-1 mb-2 mx-4 bg-[#202225] rounded-lg text-gray-300 relative">
-          <PlusCircleIcon className="h-7 hover:text-gray-100 cursor-pointer" />
+
+      {/* input */}
+      <div className="sticky bottom-3 z-50 flex flex-col  bg-[#313338] mx-4 divide-gray-700 divide-y my-3 rounded-xl">
+        {selectedFile && (
+          <div className="flex justify-start p-5">
+            <div className="bg-[#202225] p-3 rounded-xl h-50 w-50">
+              <img
+                alt=""
+                src={selectedFile}
+                className="object-contain max-h-40"
+              />
+            </div>
+
+            <div
+              className="ml-1 text-[red] icon p-1"
+              onClick={() => setSelectedFile(null)}
+            >
+              <TrashIcon className="w-5 h-5" />
+            </div>
+          </div>
+        )}
+
+        <div className="flex p-2.5 items-center space-x-1  mx-4 bg-[#313338] rounded-lg text-gray-300 relative">
+          <PlusCircleIcon
+            className="cursor-pointer h-7 hover:text-gray-100"
+            onClick={() => filePickerRef.current.click()}
+          />
+          <input
+            name=""
+            type="file"
+            ref={filePickerRef}
+            className="hidden"
+            disabled={!channelName}
+            onChange={attachFile}
+          />
           <form className="flex-grow" onSubmit={sendMessage}>
             <input
               type="text"
@@ -138,9 +205,9 @@ const Chat = () => {
               send
             </button>
           </form>
-          <GifIcon className="h-7 hover:text-gray-100 cursor-pointer" />
+          <GifIcon className="cursor-pointer h-7 hover:text-gray-100" />
           <FaceSmileIcon
-            className="h-7 hover:text-gray-100 cursor-pointer"
+            className="cursor-pointer h-7 hover:text-gray-100"
             onClick={() => setShowPicker(!showPicker)}
           />
         </div>
