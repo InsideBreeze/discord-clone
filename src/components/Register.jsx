@@ -163,10 +163,12 @@ const Register = () => {
     const user = await createUserWithEmailAndPassword(email, password);
     if (user) {
       // give the new user a default avatar and displayName
+      // 'random' number from 0-5
+      const random = Math.floor(Math.random() * 6);
       await updateProfile({
         displayName: username,
         // steal from discord
-        photoURL: "https://cdn.discordapp.com/embed/avatars/0.png",
+        photoURL: `https://cdn.discordapp.com/embed/avatars/${random}.png`,
       });
       navigate("/channels");
     }
