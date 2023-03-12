@@ -162,12 +162,13 @@ const Register = () => {
   const onSubmit = async ({ username, email, password }) => {
     const user = await createUserWithEmailAndPassword(email, password);
     if (user) {
-      // give the new user a default avatar and displayName
+      // give the new user a default avatar
       // 'random' number from 0-5
       const random = Math.floor(Math.random() * 6);
       await updateProfile({
         displayName: username,
         // steal from discord
+        // https://old.reddit.com/r/discordapp/comments/jlztdo/fun_fact_default_avatar_depends_on_your/
         photoURL: `https://cdn.discordapp.com/embed/avatars/${random}.png`,
       });
       navigate("/channels");
