@@ -8,13 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 const Header = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
-  const login = () => {
-    signInWithPopup(auth, provider)
-      .then(() => navigate("/channels"))
-      .catch((error) => {
-        console.error(error.message);
-      });
-  };
+
   return (
     <div className="flex justify-between items-center p-6 bg-discord_blurple text-white lg:px-10">
       <a href="/">
@@ -56,7 +50,7 @@ const Header = () => {
               ? () => {
                   navigate("/channels");
                 }
-              : login
+              : () => navigate("/login")
           }
         >
           {user ? "Open Discord" : "Login"}

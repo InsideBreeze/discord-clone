@@ -7,6 +7,9 @@ import Channels from "./components/Channels";
 import Chat from "./components/Chat";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
+import Login from "./components/Login";
+import SignUp from "./components/Register";
+import Register from "./components/Register";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,14 @@ const router = createBrowserRouter([
         element: <Chat />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 

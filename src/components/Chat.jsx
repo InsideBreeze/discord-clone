@@ -25,8 +25,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db, storage } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
-import data from "@emoji-mart/data/sets/14/google.json";
 import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
@@ -67,13 +67,9 @@ const Chat = () => {
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
-    console.log("hmmm");
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result);
     };
-    /* reader.onloadend = () => {
-      setSelectedFile(null);
-    }; */
   };
 
   const sendMessage = async (e) => {
@@ -183,7 +179,7 @@ const Chat = () => {
           </div>
         )}
 
-        <div className="flex p-2 items-center space-x-1  mx-4 bg-[#383a40] rounded-lg text-gray-300 relative my-3">
+        <div className="flex p-1 items-center space-x-1  mx-4 bg-[#383a40] rounded-lg text-gray-300 relative my-3">
           <PlusCircleIcon
             className="cursor-pointer h-7 hover:text-gray-100"
             onClick={() => filePickerRef.current.click()}
@@ -226,7 +222,7 @@ const Chat = () => {
           <Picker
             onEmojiSelect={handleSelectEmoji}
             theme="dark"
-            set="google"
+            data={data}
             onClickOutside={() => showPicker && setShowPicker(false)}
           />
         </div>

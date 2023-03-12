@@ -18,6 +18,8 @@ import Chat from "./Chat";
 const Channels = () => {
   const [user] = useAuthState(auth);
 
+  console.log(user);
+
   // https://github.com/CSFrequency/react-firebase-hooks/tree/master/firestore
   const [channels] = useCollection(collection(db, "channels"));
 

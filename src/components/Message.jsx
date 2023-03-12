@@ -11,12 +11,12 @@ const Message = ({ message, id, email, name, photoURL, timestamp, image }) => {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="flex p-1 my-2.5 mr-2 ml-4 items-start hover:bg-opacity-10 rounded-md group">
+    <div className="flex p-1 my-2.5 mr-2 ml-4 items-start hover:bg-opacity-10 rounded-md group bg-yellow">
       {/* <div className="flex items-center justify-center"> */}
       <img
         src={photoURL}
         alt=""
-        className="mr-3 rounded-full cursor-pointer h-9 hover:shadow-2xl"
+        className="mr-3 rounded-full cursor-pointer h-9 hover:shadow-2xl w-9"
       />
       {/*  </div> */}
       <div className="relative flex flex-col">
