@@ -5,7 +5,7 @@ import right from "../assets/home-right.svg";
 
 const Hero = () => {
   return (
-    <div className="bg-discord_blurple text-white overflow-x-hidden">
+    <div className=" bg-discord_blurple text-white overflow-x-hidden">
       <div className="h-screen md:h-[85vh] md:flex px-6 py-14 bg-discord_blurple relative">
         <div className="flex flex-col  lg:justify-center lg:items-center gap-6  lg:max-w-none md:max-w-md">
           <h1 className="font-extrabold lg:text-[44px] text-2xl">

@@ -8,17 +8,21 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import Channel from "./Channel";
 import ServerIcon from "./ServerIcon";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Chat from "./Chat";
+import MyModal from "./Modals/ServerModal";
+import { useDispatch } from "react-redux";
+import { toggleModal } from "../reducers/serverModalReducer";
 
 const Channels = () => {
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
-  console.log(user);
+  const dispatch = useDispatch();
 
   // https://github.com/CSFrequency/react-firebase-hooks/tree/master/firestore
   const [channels] = useCollection(collection(db, "channels"));
@@ -49,6 +53,7 @@ const Channels = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* servers sidebar */}
+      <MyModal />
       <div className="bg-[#2B2D31] flex flex-col space-y-3 p-2 overflow-y-scroll scrollbar-hide min-w-max">
         <div className="server_default hover:bg-discord_blurple">
           <img
@@ -64,7 +69,10 @@ const Channels = () => {
         <ServerIcon image=" https://cdn.discordapp.com/icons/757581218085863474/bac78418031b7a0c0af286d4cb29cc9b.webp" />
         {/* group makes you hover this outer div, then the plus icon will become white */}
         <div className="server_default hover:bg-discord_green group">
-          <PlusIcon className="h-6 text-discord_green group-hover:text-white" />
+          <PlusIcon
+            className="h-6 text-discord_green group-hover:text-white"
+            onClick={() => dispatch(toggleModal(true))}
+          />
         </div>
       </div>
       {/* channels sidebar */}
@@ -99,14 +107,15 @@ const Channels = () => {
         </div>
         {/* user info */}
         <div className="flex items-center justify-between bg-[#232428] p-1 ">
-          <div className="flex items-center p-1 pr-3 space-x-2 rounded-md cursor-pointer hover:bg-gray-700">
+          <div
+            className="flex items-center p-1 pr-3 space-x-2 rounded-md cursor-pointer hover:bg-gray-700"
+            onClick={() => {
+              auth.signOut();
+              navigate("/");
+            }}
+          >
             <div className="">
-              <img
-                src={user?.photoURL}
-                alt=""
-                className="rounded-full h-9"
-                onClick={() => auth.signOut()}
-              />
+              <img src={user?.photoURL} alt="" className="rounded-full h-9" />
             </div>
             <div className="font-medium">
               <h5 className="text-[#f3f4f5] text-sm">{user?.displayName}</h5>
