@@ -156,7 +156,7 @@ const Chat = () => {
       </main>
 
       {/* input */}
-      <div className="sticky bottom-3 z-50 flex flex-col  bg-[#383a40] mx-4 divide-gray-700 divide-y my-3 rounded-xl shadow-2xl">
+      <div className="sticky bottom-3 z-5 flex flex-col  bg-[#383a40] mx-4 divide-gray-700 divide-y my-3 rounded-xl shadow-2xl">
         {selectedFile && (
           <div className="flex justify-start p-5">
             <div className="bg-[#313338] p-3 rounded-xl h-50 w-50">

@@ -32,7 +32,7 @@ export default function MyModal() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-70" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -46,7 +46,7 @@ export default function MyModal() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-sm bg-white text-center align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-white text-center align-middle shadow-2xl transition-all">
                   <div className="px-6 pt-6">
                     <Dialog.Title
                       as="h3"
@@ -82,14 +82,14 @@ export default function MyModal() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between mt-5 h-20 bg-gray-100 w-full z-10 items-center">
+                  <div className="flex justify-between mt-5 h-20 bg-gray-100 w-full  items-center px-4">
                     <button
-                      className="font-semibold bg-[red]"
+                      className="font-semibold"
                       onClick={() => dispatch(toggleModal(false))}
                     >
                       Back
                     </button>
-                    <button className="bg-discord_blurple px-5 py-2 rounded-sm text-white">
+                    <button className="bg-discord_blurple px-5 py-2 rounded-md text-white">
                       Create
                     </button>
                   </div>
