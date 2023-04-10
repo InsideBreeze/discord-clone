@@ -5,6 +5,16 @@ import { auth, provider } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+const menus = [
+  "Download",
+  "Nitro",
+  "Discover",
+  "Safety",
+  "Support",
+  "Blog",
+  "Careers",
+];
+
 const Header = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
@@ -19,27 +29,11 @@ const Header = () => {
         />
       </a>
       <div className="space-x-4 hidden lg:flex">
-        <a href="" className="nav_link">
-          Download
-        </a>
-        <a href="" className="nav_link">
-          Nitro
-        </a>
-        <a href="" className="nav_link">
-          Discover
-        </a>
-        <a href="" className="nav_link">
-          Safety
-        </a>
-        <a href="" className="nav_link">
-          Support
-        </a>
-        <a href="" className="nav_link">
-          Blog
-        </a>
-        <a href="" className="nav_link">
-          Careers
-        </a>
+        {menus.map((menu) => (
+          <a key={menu} className="nav_link">
+            {menu}
+          </a>
+        ))}
       </div>
       <div className="flex items-center space-x-2 justify-center">
         <button

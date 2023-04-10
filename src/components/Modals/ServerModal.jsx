@@ -57,6 +57,7 @@ export default function MyModal() {
     }
 
     dispatch(toggleModal(false));
+    setSelectedFile('')
 
 
   }
